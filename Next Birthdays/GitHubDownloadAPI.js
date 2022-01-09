@@ -1,7 +1,7 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: light-gray; icon-glyph: magic;
-const github = "https://raw.githubusercontent.com/GerMichael/Scriptable_Files/main/";
+const github = "https://raw.githubusercontent.com/GerMichael/Scriptable_Files/main/Next%20Birthdays";
 const metaFile = "meta.json";
 
 let url = github + metaFile;
