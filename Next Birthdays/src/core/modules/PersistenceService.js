@@ -48,6 +48,7 @@ class AbstractPersistenceService {
             throw AbstractPersistenceService.SERVICE_NOT_AVAILABLE;
         }
 
+        console.log("Setting docuemnts-directory to file-destination");
         this.dir = this.fs.documentsDirectory();
     }
 
@@ -56,6 +57,7 @@ class AbstractPersistenceService {
             throw AbstractPersistenceService.SERVICE_NOT_AVAILABLE;
         }
         
+        console.log("Setting library-directory to file-destination");
         this.dir = this.fs.libraryDirectory();
     }
 
@@ -64,7 +66,8 @@ class AbstractPersistenceService {
             throw AbstractPersistenceService.SERVICE_NOT_AVAILABLE;
         }
 
-        this.dir = this.fs.libraryDirectory();
+        console.log("Setting temporary-directory to file-destination");
+        this.dir = this.fs.temporaryDirectory();
     }
 
     storeJSON(file, json){
@@ -79,10 +82,12 @@ class AbstractPersistenceService {
             throw AbstractPersistenceService.DIR_NOT_AVAILABLE;
         }
 
+        console.log(`Storing data to ${file}`);
         this.fs.writeString(this.getPath(file), string);
     }
 
     readString(file){
+        console.log(`Reading data from ${file}`);
         return this.fs.readString(this.getPath(file));
     }
 
@@ -113,6 +118,8 @@ class LocalPersistenceService extends AbstractPersistenceService {
         super();
         this.fs = FileManager.local();
 
+        console.log("Using local file manager");
+
         this.useDocuments();
     }
 
@@ -132,6 +139,8 @@ class CloudPersistenceService extends AbstractPersistenceService {
     constructor(){
         super();
         this.fs = FileManager.iCloud();
+
+        console.log("Using icloud manager");
 
         this.useDocuments();
     }
