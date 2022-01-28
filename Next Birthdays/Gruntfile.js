@@ -12,6 +12,7 @@ module.exports = function(grunt) {
             nb_core: {
                 src: [
                     "src/core/NextBirthdays_Header.js", 
+                    "src/core/modules/Constants.js", 
                     "src/core/modules/ArgumentsHandler.js", 
                     "src/core/modules/PersistenceService.js", 
                     "src/core/modules/Update.js", 
