@@ -18,7 +18,7 @@ module.exports = function(grunt) {
                     "src/core/modules/Initializer.js", 
                     "src/core/NextBirthdays.js"
                 ],
-                dest: "dist/NextBirthdays.js"
+                dest: "dist/NextBirthdays.assembly.js"
             },
             nb_plugin: {
 
