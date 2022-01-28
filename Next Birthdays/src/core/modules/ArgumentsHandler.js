@@ -12,16 +12,19 @@ class ArgumentsHandler {
 
             for(let arg of argsArray){
                 let argSplitted = arg.split("=");
-                ArgumentsHandler.args.set(argSplitted[0], argSplitted[1]);
+
+                let key = argSplitted[0].toLowerCase();
+                let value = argSplitted[1] ? argSplitted[1].toLowerCase() : undefined;
+                ArgumentsHandler.args.set(key, value);
             }
         }
     }
 
     static hasArg(name){
-        return ArgumentsHandler.args.has(name);
+        return ArgumentsHandler.args.has(name.toLowerCase());
     }
 
     static getArg(name){
-        return ArgumentsHandler.args.get(name);
+        return ArgumentsHandler.args.get(name.toLowerCase());
     }
 }
