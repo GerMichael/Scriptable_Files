@@ -1,5 +1,14 @@
 class PersistenceService {
     
+    static instance = null;
+
+    static getInstance(){
+        if(PersistenceService.instance == null){
+            PersistenceService.instance = new PersistenceService();
+        }
+        return PersistenceService.instance;
+    }
+
     constructor(){
         if(CloudPersistenceService.isAvailable()){
             this.service = new CloudPersistenceService();
@@ -36,6 +45,10 @@ class PersistenceService {
 
     fileExists(file){
         return this.service.fileExists(file);
+    }
+
+    deleteFile(file){
+        this.service.deleteFile(file);
     }
 }
 
@@ -109,6 +122,14 @@ class AbstractPersistenceService {
         }
 
         return this.fs.fileExists(this.getPath(file));
+    }
+
+    deleteFile(file){
+        if(this.dir == null){
+            throw AbstractPersistenceService.DIR_NOT_AVAILABLE;
+        }
+
+        this.fs.remove(this.getPath(file));
     }
 }
 
