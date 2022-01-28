@@ -1,6 +1,6 @@
 ArgumentsHandler.init();
 
-const persistenceService = new PersistenceService();
+const persistenceService = PersistenceService.getInstance();
 
 const app = Initializer.init();
 
