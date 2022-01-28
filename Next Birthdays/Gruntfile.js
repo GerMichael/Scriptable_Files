@@ -8,11 +8,11 @@ module.exports = function(grunt) {
 
         concat: {
             core: {
-                src: ["src/core/NextBirthdays.js", "src/core/modules/*.js"],
+                src: ["src/core/NextBirthdays_Header.js", "src/core/modules/*.js", "src/core/NextBirthdays.js"],
                 dest: "dist/NextBirthdays.js"
             },
             plugin: {
-                
+
             }
         }
     });
