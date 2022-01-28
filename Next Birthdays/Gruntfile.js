@@ -10,8 +10,9 @@ module.exports = function(grunt) {
 
         concat: {
             nb_core: {
-                src: ["src/core/NextBirthdays_Header.js", "src/core/modules/PersistenceService.js", "src/core/modules/Initializer.js", 
-                "src/core/modules/PropertyHandler.js", "src/core/modules/Update.js", "src/core/NextBirthdays.js"],
+                src: ["src/core/NextBirthdays_Header.js", "src/core/modules/PersistenceService.js", 
+                "src/core/modules/Update.js", "src/core/modules/Initializer.js", 
+                "src/core/modules/PropertyHandler.js", "src/core/NextBirthdays.js"],
                 dest: "dist/NextBirthdays.js"
             },
             nb_plugin: {
