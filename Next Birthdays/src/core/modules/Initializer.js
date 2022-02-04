@@ -1,13 +1,13 @@
 class Initializer{
 
-    static init(){
+    static init(metaFileName){
         console.log("Initializing...");
 
-        let fileExists = persistenceService.fileExists("meta.json");
+        let fileExists = persistenceService.fileExists(metaFileName);
         let metaFile;
 
         if(fileExists){
-            metaFile = persistenceService.readAsJSON("meta.json");
+            metaFile = persistenceService.readAsJSON(metaFileName);
             console.log("Meta-file loaded successfully!");
         } else {
             throw "Meta file not available!";
@@ -17,6 +17,7 @@ class Initializer{
 
         console.log("Checking existence of all modules.");
         for(let plugin of metaFile.plugins.modules){
+            console.log(` > Checking ${plugin}`);
             let mod = importModule(plugin);
             pluginsMap.set(plugin, mod);
 

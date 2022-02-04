@@ -2,7 +2,7 @@ ArgumentsHandler.init();
 
 const persistenceService = PersistenceService.getInstance();
 
-const app = Initializer.init();
+const app = Initializer.init("meta.json");
 
 console.log(app.metaFile);
 console.log(app.entrypoint);
