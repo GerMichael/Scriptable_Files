@@ -1,0 +1,7 @@
+{
+    "title": "Next Birthdays 🎁",
+    "description": "The next birthdays of your contacts!",
+    "version": 0.1,
+    "script": "Next Birthdays.js",
+    "origin": "Next Birthdays/dir/NextBirthdays.assembly.js"
+}
