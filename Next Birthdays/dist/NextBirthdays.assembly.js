@@ -1,9 +1,9 @@
 class Constants{
 
     static META_FILE_SUFFIX = ".meta.json";
-    static REPO_URL = "https://github.com/GerMichael/Scriptable_Files/tree/main/";
+    static REPO_URL = "https://raw.githubusercontent.com/GerMichael/Scriptable_Files/new_approach/";
     static SCRIPT_NAME_ATTR = "script";
-    static SCRIPT_DIST_PATH_ATTR = "dist_path";
+    static SCRIPT_ORIGIN_ATTR = "origin";
     static VERSION_ATTR = "version";
     
 }
@@ -64,7 +64,21 @@ class PersistenceService {
         this.service = new CloudPersistenceService();
     }
 
+    useDocuments(){
+        this.service.useDocuments();
+    }
+
+    useLibrary(){
+        this.service.useLibrary();
+    }
+
+    useTemporary(){
+        this.service.useTemporary();
+    }
+
     store(file, data){
+        console.log("storing: " + data);
+
         if(typeof data === "string"){
             this.service.storeString(file, data);
         } else if(typeof data === "object"){
@@ -123,12 +137,14 @@ class AbstractPersistenceService {
     }
 
     storeJSON(file, json){
+        console.log("store as json");
         let string = JSON.stringify(json);
 
         this.storeString(file, string);
     }
 
     storeString(file, string){
+        console.log("store as string");
       
         if(this.dir == null){
             throw AbstractPersistenceService.DIR_NOT_AVAILABLE;
@@ -205,6 +221,87 @@ class CloudPersistenceService extends AbstractPersistenceService {
         this.useDocuments();
     }
 }
+class Updater {
+
+    static async updateAvailable(metaFile){
+        let persist = PersistenceService.getInstance();
+        persist.useCloudService();
+        persist.useDocuments();
+
+        let metaData = persist.readAsJSON(metaFile);
+        let scriptOrigin = metaData[Constants.SCRIPT_ORIGIN_ATTR];
+
+        let req = new Request(Constants.REPO_URL + scriptOrigin + Constants.META_FILE_SUFFIX);
+        let remoteMetaData = await req.loadJSON();
+        console.log(remoteMetaData);
+
+        let updateAvailable = false;
+        if(remoteMetaData[Constants.VERSION_ATTR] != metaData[Constants.VERSION_ATTR]){
+            updateAvailable = true;
+        }
+
+        return {"result": updateAvailable, remoteMetaData};
+    }
+
+    static async update(metaFile){
+
+        let updateAvailableResult = await Updater.updateAvailable(metaFile);
+
+        if(!updateAvailableResult.result){
+            return;
+        }
+
+        let userAccepts = await Updater.userWantsToUpdate();
+
+        if(userAccepts){
+            console.log("Updating...");
+        
+            let metaData = updateAvailableResult.remoteMetaData;
+    
+            console.log("load script");
+            let scriptContent = await Updater.requestScript(metaData);
+            let scriptName = metaData[Constants.SCRIPT_NAME_ATTR];
+
+            console.log("update script with name: " + scriptName);
+            persist.store(scriptName, scriptContent);
+    
+            let metaFileName = scriptName + Constants.META_FILE_SUFFIX;
+            console.log("update script meta file with name: " + metaFileName);
+            persist.store(metaFileName, metaData);
+        } else {
+            console.log("Update canceled");
+        }
+    }
+
+    static async userWantsToUpdate(){
+        let a = new Alert();
+
+        a.title = "Update available"
+        a.message = "Do you want to download the new update for this widget?";
+
+        a.addCancelAction("No");
+        a.addAction("Yes");
+
+        let result = await a.present();
+        
+        console.log("Update was " + (result === 0 ? "accepted" : "rejected"));
+
+        return result === 0;
+    }
+
+    static async requestScript(metaData){
+        console.log("requesting script");
+
+        let scriptOrigin = metaData[Constants.SCRIPT_ORIGIN_ATTR];
+
+        let req = new Request(Constants.REPO_URL + scriptOrigin);
+        let script = await req.loadString();
+
+        console.log("loaded script successfully");
+
+        return script;
+    }
+}
 class Initializer{
 
     static init(metaFileName){
@@ -252,6 +349,7 @@ class Initializer{
     }
 
 }
+/*
 ArgumentsHandler.init();
 
 const persistenceService = PersistenceService.getInstance();
@@ -277,3 +375,6 @@ Script.complete();
 if(!config.runsInWidget){
   widget.presentLarge();
 }
+*/
+
+Updater.update("meta.json");
