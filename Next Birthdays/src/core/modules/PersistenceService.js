@@ -25,7 +25,21 @@ class PersistenceService {
         this.service = new CloudPersistenceService();
     }
 
+    useDocuments(){
+        this.service.useDocuments();
+    }
+
+    useLibrary(){
+        this.service.useLibrary();
+    }
+
+    useTemporary(){
+        this.service.useTemporary();
+    }
+
     store(file, data){
+        console.log("storing data of type " + (typeof data));
+
         if(typeof data === "string"){
             this.service.storeString(file, data);
         } else if(typeof data === "object"){
@@ -84,12 +98,14 @@ class AbstractPersistenceService {
     }
 
     storeJSON(file, json){
+        console.log("store as json");
         let string = JSON.stringify(json);
 
         this.storeString(file, string);
     }
 
     storeString(file, string){
+        console.log("store as string");
       
         if(this.dir == null){
             throw AbstractPersistenceService.DIR_NOT_AVAILABLE;
