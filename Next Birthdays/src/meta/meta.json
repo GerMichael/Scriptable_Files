@@ -3,5 +3,5 @@
     "description": "The next birthdays of your contacts!",
     "version": 0.1,
     "script": "NextBirthdays.js",
-    "origin": "NextBirthdays/dir/NextBirthdays.assembly.js"
+    "origin": "Next%20Birthdays/dist/NextBirthdays.assembly.js"
 }

@@ -1,3 +1,4 @@
+/*
 ArgumentsHandler.init();
 
 const persistenceService = PersistenceService.getInstance();
@@ -23,3 +24,6 @@ Script.complete();
 if(!config.runsInWidget){
   widget.presentLarge();
 }
+*/
+
+Updater.update("meta.json");
