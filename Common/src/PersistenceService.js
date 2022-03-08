@@ -11,9 +11,9 @@ class PersistenceService {
 
     constructor(){
         if(CloudPersistenceService.isAvailable()){
-            this.service = new CloudPersistenceService();
+            this.useCloudService();
         } else {
-            this.service = new LocalPersistenceService();
+            this.useLocalService();
         }
     }
 
@@ -27,14 +27,6 @@ class PersistenceService {
 
     useDocuments(){
         this.service.useDocuments();
-    }
-
-    useLibrary(){
-        this.service.useLibrary();
-    }
-
-    useTemporary(){
-        this.service.useTemporary();
     }
 
     store(file, data){
@@ -77,24 +69,6 @@ class AbstractPersistenceService {
 
         console.log("Setting docuemnts-directory to file-destination");
         this.dir = this.fs.documentsDirectory();
-    }
-
-    useLibrary(){
-        if(this.fs == null){
-            throw AbstractPersistenceService.SERVICE_NOT_AVAILABLE;
-        }
-        
-        console.log("Setting library-directory to file-destination");
-        this.dir = this.fs.libraryDirectory();
-    }
-
-    useTemporary(){
-        if(this.fs == null){
-            throw AbstractPersistenceService.SERVICE_NOT_AVAILABLE;
-        }
-
-        console.log("Setting temporary-directory to file-destination");
-        this.dir = this.fs.temporaryDirectory();
     }
 
     storeJSON(file, json){
