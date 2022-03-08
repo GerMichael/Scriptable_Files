@@ -148,4 +148,69 @@ class ContactService {
             throw new Error("No contacts were found having birthday in the future.")
         }
     }
+
+    static getNextAgeForContact(contact){
+        let bdayYear = this.getBirthdayYear(contact);
+        let yearsBetween;
+
+        if (bdayYear <= 1) {
+            yearsBetween = 0;
+        } else {
+            yearsBetween = this.getYearsBetween(bdayYear);
+        }
+
+        return yearsBetween;
+    }
+
+    static getYearsBetween(bdayYear) {
+        return new Date().getFullYear() - bdayYear;
+    }
+
+    static getBirthdayYear(contact) {
+        const bday = contact.birthday;
+        if (!bday) {
+            return null;
+        }
+
+        const bDate = new Date(bday);
+
+        return bDate.getFullYear();
+    }
+
+    static getDaysUntilContactsBirthday(contact) {
+        const today = new Date();
+        let [day, month] = this.getDayAndMonth(contact);
+        let bday = this.getNextBday(day, month);
+        let daysBetween = this.getDaysBetween(bday, today);
+        return daysBetween;
+    }
+
+    static getDayAndMonth(contact) {
+        const bday = contact.birthday;
+        if (!bday) {
+            return null;
+        }
+
+        const bDate = new Date(bday);
+
+        return [bDate.getDate(), bDate.getMonth()];
+    }
+
+    static getNextBday(day, month) {
+        const today = new Date();
+        const date = new Date();
+
+        date.setDate(day);
+        date.setMonth(month);
+        const year = (date.getTime() < today.getTime() ? today.getFullYear() + 1 : today.getFullYear())
+        date.setYear(year);
+
+        return date;
+    }
+
+    static getDaysBetween(dateA, dateB) {
+        var difference = dateA.getTime() - dateB.getTime();
+        // og(dateA, dateB)
+        return Math.floor(difference / (1000 * 3600 * 24));
+    }
 }

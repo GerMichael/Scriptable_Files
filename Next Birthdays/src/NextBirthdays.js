@@ -1,3 +1,5 @@
+ArgumentsHandler.init();
+
 let contacts = await ContactService.loadContacts(true);
 
 console.log("Resulting contact list:");
@@ -10,9 +12,13 @@ console.log("List tail");
 let widgetWrapper = new WidgetWrapper();
 let widget = widgetWrapper.widget;
 
-let renderer = new StackRenderer(widget);
-// renderer.renderNotification("Contacts: " + contacts.length);
-renderer.renderData(contacts);
+if(ArgumentsHandler.hasArg("html")){
+  let renderer = new HtmlRenderer(widget);
+  await renderer.renderData(contacts);
+} else {
+  let renderer = new StackRenderer(widget);
+  renderer.renderData(contacts);
+}
 
 widget.presentLarge();
 Script.complete();

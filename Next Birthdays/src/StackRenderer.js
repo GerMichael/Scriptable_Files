@@ -61,13 +61,13 @@ class StackRenderer {
 
         dayStack.layoutVertically();
 
-        let longestBdayDiff = this.getDaysUntilContactsBirthday(contacts[contacts.length - 1]);
+        let longestBdayDiff = ContactService.getDaysUntilContactsBirthday(contacts[contacts.length - 1]);
 
         let padStartLength = new String(longestBdayDiff).length;
 
         for (var contact of contacts) {
 
-            let daysBetween = this.getDaysUntilContactsBirthday(contact);
+            let daysBetween = ContactService.getDaysUntilContactsBirthday(contact);
 
             var daysBetweenAsString = "";
 
@@ -101,13 +101,13 @@ class StackRenderer {
 
         for (var contact of contacts) {
 
-            let bdayYear = this.getBirthdayYear(contact);
+            let bdayYear = ContactService.getBirthdayYear(contact);
             let yearsBetween;
 
             if (bdayYear <= 1) {
                 yearsBetween = "--";
             } else {
-                yearsBetween = this.getYearsBetween(bdayYear);
+                yearsBetween = ContactService.getYearsBetween(bdayYear);
             }
 
             let text = ageStack.addText("(" + yearsBetween + ")")
@@ -144,7 +144,7 @@ class StackRenderer {
         bdayStack.layoutVertically();
 
         for (var contact of contacts) {
-            let [day, month] = this.getDayAndMonth(contact);
+            let [day, month] = ContactService.getDayAndMonth(contact);
             let text = bdayStack.addText(this.twoDigit(day) + ". " + this.monthText(month))
 
             text.textColor = primaryTextColor;
@@ -162,54 +162,10 @@ class StackRenderer {
 
     getDaysUntilContactsBirthday(contact) {
         const today = new Date();
-        let [day, month] = this.getDayAndMonth(contact);
-        let bday = this.getNextBday(day, month);
-        let daysBetween = this.getDaysBetween(bday, today);
+        let [day, month] = ContactService.getDayAndMonth(contact);
+        let bday = ContactService.getNextBday(day, month);
+        let daysBetween = ContactService.getDaysBetween(bday, today);
         return daysBetween;
-    }
-
-    getYearsBetween(bdayYear) {
-        return new Date().getFullYear() - bdayYear;
-    }
-
-    getBirthdayYear(contact) {
-        const bday = contact.birthday;
-        if (!bday) {
-            return null;
-        }
-
-        const bDate = new Date(bday);
-
-        return bDate.getFullYear();
-    }
-
-    getDayAndMonth(contact) {
-        const bday = contact.birthday;
-        if (!bday) {
-            return null;
-        }
-
-        const bDate = new Date(bday);
-
-        return [bDate.getDate(), bDate.getMonth()];
-    }
-
-    getNextBday(day, month) {
-        const today = new Date();
-        const date = new Date();
-
-        date.setDate(day);
-        date.setMonth(month);
-        const year = (date.getTime() < today.getTime() ? today.getFullYear() + 1 : today.getFullYear())
-        date.setYear(year);
-
-        return date;
-    }
-
-    getDaysBetween(dateA, dateB) {
-        var difference = dateA.getTime() - dateB.getTime();
-        // og(dateA, dateB)
-        return Math.floor(difference / (1000 * 3600 * 24));
     }
 
     monthText(month) {
