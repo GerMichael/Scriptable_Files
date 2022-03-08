@@ -6,3 +6,13 @@ for(let c of contacts){
     c.print();
 }
 console.log("List tail");
+
+let widgetWrapper = new WidgetWrapper();
+let widget = widgetWrapper.widget;
+
+let renderer = new StackRenderer(widget);
+// renderer.renderNotification("Contacts: " + contacts.length);
+renderer.renderData(contacts);
+
+widget.presentLarge();
+Script.complete();

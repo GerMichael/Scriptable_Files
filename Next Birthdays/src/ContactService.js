@@ -121,4 +121,31 @@ class ContactService {
     static storeContactsToCache(cacheFileName, contacts){
         PersistenceService.getInstance().store(cacheFileName, contacts);
     }
+
+    static getNextNContacts(contacts, numContacts){
+
+        let today = new Date();
+        let nextNContacts = undefined;
+
+        for(let i = 0; i < contacts.length; i++){
+            let c = contacts[i];
+
+            if( c.birthday.getMonth() > today.getMonth() ||
+                c.birthday.getMonth() === today.getMonth() &&  
+                c.birthday.getDate() >= today.getDate()){
+
+                nextNContacts = contacts.slice(i, i + numContacts);
+
+                if(nextNContacts.length < numContacts){
+                    nextNContacts = nextNContacts.concat(contacts.slice(0, numContacts - nextNContacts.length));
+                }
+
+                return nextNContacts;
+            }
+        }
+
+        if(nextNContacts === undefined){
+            throw new Error("No contacts were found having birthday in the future.")
+        }
+    }
 }
