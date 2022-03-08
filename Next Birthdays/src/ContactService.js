@@ -6,16 +6,27 @@ class ContactService {
         let contacts;
 
         if(loadFromCache){
-            contacts = await this.loadContactsFromCache(this.CONTACTS_CACHE_FILE_NAME);
+            if(PersistenceService.getInstance().fileExists(this.CONTACTS_CACHE_FILE_NAME)){
+                contacts = await this.loadContactsFromCache(this.CONTACTS_CACHE_FILE_NAME);
+            } else {
+                throw new Error("Cache does not exist!");
+            }
         } else {
-            contacts = await this.loadContactsFromOS();
+            contacts = await this.loadContactsFromOS(this.CONTACTS_CACHE_FILE_NAME);
         }
 
         return contacts;
     }
 
     static loadContactsFromCache(cacheFileName){
+        let contactsRaw = PersistenceService.getInstance().readAsJSON(cacheFileName);
+        let contacts = [];
 
+        for(let c of contactsRaw){
+            contacts.push(new Person(c));
+        }
+
+        return contacts;
     }
 
     static async loadContactsFromOS(cacheFileName){
@@ -29,13 +40,6 @@ class ContactService {
         contacts = this.getContactsWithBirthday(contacts);
         contacts = this.getUniqueContacts(contacts);
         contacts = this.getSortedContacts(contacts);
-        
-        console.log("Resulting contact list:");
-        console.log("List head");
-        for(let c of contacts){
-            c.print();
-        }
-        console.log("List tail");
 
         this.storeContactsToCache(cacheFileName, contacts);
         
@@ -115,6 +119,6 @@ class ContactService {
     }
 
     static storeContactsToCache(cacheFileName, contacts){
-
+        PersistenceService.getInstance().store(cacheFileName, contacts);
     }
 }
