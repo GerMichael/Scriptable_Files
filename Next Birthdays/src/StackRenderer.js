@@ -18,6 +18,8 @@ class StackRenderer {
 
         this.addWidgetTitle(widget, "Next Birthdays 🎁", titleSize, primaryTextColor);
 
+        widget.addSpacer(vSpacerSize)
+    
         let stack = widget.addStack();
 
         const contactsToDisplay = ContactService.getNextNContacts(contacts, numContacts);
